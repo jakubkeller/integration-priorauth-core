@@ -1,5 +1,5 @@
 {
-  "app": "dotnet run --project infra/src/Core/Core.csproj",
+  "app": "dotnet run --project src/Core/Core.csproj",
   "watch": {
     "include": [
       "**"
@@ -7,11 +7,11 @@
     "exclude": [
       "README.md",
       "cdk*.json",
-      "infra/src/*/obj",
-      "infra/src/*/bin",
-      "infra/src/*.sln",
-      "infra/src/*/GlobalSuppressions.cs",
-      "infra/src/*/*.csproj"
+      "src/*/obj",
+      "src/*/bin",
+      "src/*.sln",
+      "src/*/GlobalSuppressions.cs",
+      "src/*/*.csproj"
     ]
   },
   "context": {

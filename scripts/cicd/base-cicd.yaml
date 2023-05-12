@@ -39,6 +39,7 @@ stages:
     # Setup Env
     - script: |
         echo "Setting Up Env"
+        chmod u+x ./scripts/setenv.sh
         ./scripts/setenv.sh
       workingDirectory: "$(Build.Repository.LocalPath)"
       displayName: "Setup Environment"
@@ -60,7 +61,7 @@ stages:
     #     disableAutoCwd: true
 
     - script: |
-        chmod u+x ./scripts/pack.sh && 
+        chmod u+x ./scripts/pack.sh
         ./scripts/pack.sh
       condition: succeeded()
       workingDirectory: "$(Build.Repository.LocalPath)"

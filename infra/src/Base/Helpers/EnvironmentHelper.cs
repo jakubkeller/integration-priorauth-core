@@ -1,6 +1,6 @@
 using Amazon.CDK;
 
-namespace Core.Helpers;
+namespace Integration.Banjo.Base.Helpers;
 
 public static class EnvironmentHelper
 {

@@ -1,4 +1,4 @@
-namespace Core.Helpers.Enums
+namespace Integration.Banjo.Base.Helpers.Enums
 {
     public enum DataClassification
     {

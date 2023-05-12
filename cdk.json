@@ -2,11 +2,12 @@
   "app": "dotnet run --project infra/src/Core/Core.csproj",
   "watch": {
     "include": [
-      "**"
+      "infra/src/Core**"
     ],
     "exclude": [
       "README.md",
       "cdk*.json",
+      "infra/src/Base**",
       "infra/src/*/obj",
       "infra/src/*/bin",
       "infra/src/*.sln",

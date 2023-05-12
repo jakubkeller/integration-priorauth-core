@@ -8,14 +8,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- CDK Construct Library dependencies -->
-    <PackageReference Include="Amazon.CDK.Lib" Version="2.78.0" />
-    <PackageReference Include="Constructs" Version="10.1.292" />
-    <PackageReference Include="Nucleus.Nagpack" Version="1.1.6" />
+    <None Remove="nuget.config" />
+  </ItemGroup>
 
-    <!-- jsii Roslyn analyzers (un-comment to obtain compile-time checks for missing required props
-    <PackageReference Include="Amazon.Jsii.Analyzers" Version="*" PrivateAssets="all" />
-    -->
+  <ItemGroup>
+    <PackageReference Include="Amazon.CDK.Lib" Version="2.78.0" />
+    <PackageReference Include="Constructs" Version="10.2.12" />
+    <PackageReference Include="Nucleus.Nagpack" Version="1.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Base\Base.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="nuget.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

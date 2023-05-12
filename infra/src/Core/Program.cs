@@ -1,27 +1,21 @@
 ﻿using Amazon.CDK;
-using Core;
-using Core.Helpers;
-using Nucleus.Nagpack;
-using System.Collections.Generic;
+using Integration.Banjo.Base.Helpers;
+using Integration.Banjo.Core.Config;
+using Integration.Banjo.Core.Stack;
 
-namespace Infra
+namespace Integration.Banjo.Core;
+
+sealed class Program
 {
-    sealed class Program
+    private static readonly string _localStackPrefix = System.Environment.GetEnvironmentVariable("LOCAL_STACK_PREFIX") ?? "IntegrationBanjo";
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var app = new App();
+        var app = new App();
 
-            var env = EnvironmentHelper.MakeEnvironment();
+        var currentEnvironment = ConfigHelper.GetCurrentEnvironment(System.Environment.GetEnvironmentVariable("CDK_DEFAULT_ACCOUNT"));
 
-            new CoreStack(app, "CoreStack", new StackProps
-            {
-                Env = env
-            });
+        new CoreStack(app, $"{_localStackPrefix}-{currentEnvironment.Name}-CoreStack", new StackProps { Env = EnvironmentHelper.MakeEnvironment() });
 
-            Aspects.Of(app).Add(new NucleusNagpack());
-
-            app.Synth();
-        }
+        app.Synth();
     }
 }

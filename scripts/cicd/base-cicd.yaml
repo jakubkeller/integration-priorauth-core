@@ -60,6 +60,7 @@ stages:
     #     disableAutoCwd: true
 
     - script: |
+        chmod u+x ./scripts/pack.sh && 
         ./scripts/pack.sh
       condition: succeeded()
       workingDirectory: "$(Build.Repository.LocalPath)"

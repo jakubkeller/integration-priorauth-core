@@ -1,0 +1,94 @@
+trigger:
+- main
+- develop
+
+variables:
+  NODE_VERSION: "16.15.1"
+  CDK_VERSION: "2.78.0"
+
+# Queue Time Configuration Parameters
+parameters:
+- name: poolName
+  displayName: Agent Pool
+  type: string
+  default: 'aws-cdk'  
+  values:
+  - 'aws-cdk'
+- name: clean
+  displayName: Checkout Clean
+  type: boolean
+  default: true
+  values:
+  - false
+  - true
+
+stages:
+- stage: BuildBaseClassLibrary
+  displayName: "Build Base Class Library"
+  jobs:
+  - job: Build
+    displayName: "Package Build"
+    pool:
+      name: ${{parameters.poolName}}
+
+    steps:
+    # Checkout code and clean agent working dir
+    - checkout: self
+      clean: ${{ parameters.clean }}
+
+    # Setup Env
+    - script: |
+        echo "Setting Up Env"
+        ./scripts/setenv.sh
+      workingDirectory: "$(Build.Repository.LocalPath)"
+      displayName: "Setup Environment"
+
+    # Display Current Environment Variables, sorted - Debugging Task
+    - script: |
+        env | sort
+      displayName: 'Display Environment Variables'
+
+    # - task: AWSShellScript@1
+    #   condition: succeeded()
+    #   displayName: "Run Tests"
+    #   inputs:
+    #     awsCredentials: pod12-sandbox
+    #     regionName: us-east-2
+    #     scriptType: inline
+    #     inlineScript: "./scripts/test.sh"
+    #     workingDirectory: "$(Build.Repository.LocalPath)"
+    #     disableAutoCwd: true
+
+    - script: |
+        ./scripts/pack.sh
+      condition: succeeded()
+      workingDirectory: "$(Build.Repository.LocalPath)"
+      displayName: 'Build package'
+
+    - task: NuGetAuthenticate@0
+      condition: succeeded()
+      displayName: 'NuGet Authenticate'
+      inputs:
+        forceReinstallCredentialProvider: true
+
+    - task: DotNetCoreCLI@2
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+      displayName: 'Publish Integration Banjo Base Package to Test_feed'
+      continueOnError: true
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.StagingDirectory)/**/Integration.Banjo.*.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'Test_Feed'
+        allowPackageConflicts: true
+
+    # - task: DotNetCoreCLI@2
+    #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    #   displayName: 'Publish UM Core Package to Enterprise Feed'
+    #   continueOnError: true
+    #   inputs:
+    #     command: 'push'
+    #     packagesToPush: '$(Build.StagingDirectory)/**/UM.*.nupkg'
+    #     nuGetFeedType: 'internal'
+    #     publishVstsFeed: ${{parameters.feedName}}
+    #     allowPackageConflicts: true

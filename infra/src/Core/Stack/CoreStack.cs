@@ -12,8 +12,8 @@ public class CoreStack : BaseStack
     {
 
         const string EVENT_BUS_NAME = "Banjo";
-        var stackName = Node.TryGetContext("stackName")?.ToString() ?? null;
-        var ssmPathRoot = $"/app/{stackName}";
+        var stackName = Amazon.CDK.Stack.Of(this).StackName;
+        var ssmPathRoot = $"/app/{stackName}/";
 
         var banjoEventBus = new EventBus(this, "BanjoEventBus", new EventBusProps {
             EventBusName = EVENT_BUS_NAME,

@@ -23,8 +23,8 @@ parameters:
   - true
 
 stages:
-- stage: BuildBaseClassLibrary
-  displayName: "Build Base Class Library"
+- stage: PublishBaseIntegrationBanjoNuget
+  displayName: "Publish Base Integration Banjo Nuget Package"
   jobs:
   - job: Build
     displayName: "Package Build"
@@ -39,8 +39,8 @@ stages:
     # Setup Env
     - script: |
         echo "Setting Up Env"
-        chmod u+x ./scripts/setenv.sh
-        ./scripts/setenv.sh
+        chmod u+x ./scripts/cicd/infra/setenv.sh
+        ./scripts/cicd/infra/setenv.sh
       workingDirectory: "$(Build.Repository.LocalPath)"
       displayName: "Setup Environment"
 
@@ -49,20 +49,9 @@ stages:
         env | sort
       displayName: 'Display Environment Variables'
 
-    # - task: AWSShellScript@1
-    #   condition: succeeded()
-    #   displayName: "Run Tests"
-    #   inputs:
-    #     awsCredentials: pod12-sandbox
-    #     regionName: us-east-2
-    #     scriptType: inline
-    #     inlineScript: "./scripts/test.sh"
-    #     workingDirectory: "$(Build.Repository.LocalPath)"
-    #     disableAutoCwd: true
-
     - script: |
-        chmod u+x ./scripts/pack.sh
-        ./scripts/pack.sh
+        chmod u+x ./scripts/cicd/dotnet/pack.sh
+        ./scripts/cicd/dotnet/pack.sh
       condition: succeeded()
       workingDirectory: "$(Build.Repository.LocalPath)"
       displayName: 'Build package'
@@ -75,7 +64,7 @@ stages:
 
     - task: DotNetCoreCLI@2
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-      displayName: 'Publish Integration Banjo Base Package to Test_feed'
+      displayName: 'Publish Integration Banjo Base Package to Test_Feed'
       continueOnError: true
       inputs:
         command: 'push'
@@ -84,13 +73,13 @@ stages:
         publishVstsFeed: 'Test_Feed'
         allowPackageConflicts: true
 
-    # - task: DotNetCoreCLI@2
-    #   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
-    #   displayName: 'Publish UM Core Package to Enterprise Feed'
-    #   continueOnError: true
-    #   inputs:
-    #     command: 'push'
-    #     packagesToPush: '$(Build.StagingDirectory)/**/UM.*.nupkg'
-    #     nuGetFeedType: 'internal'
-    #     publishVstsFeed: ${{parameters.feedName}}
-    #     allowPackageConflicts: true
+    - task: DotNetCoreCLI@2
+      condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+      displayName: 'Publish Integration Banjo Base Package to Enterprise_Feed'
+      continueOnError: true
+      inputs:
+        command: 'push'
+        packagesToPush: '$(Build.StagingDirectory)/**/Integration.Banjo.*.nupkg'
+        nuGetFeedType: 'internal'
+        publishVstsFeed: 'Enterprise_Feed'
+        allowPackageConflicts: true

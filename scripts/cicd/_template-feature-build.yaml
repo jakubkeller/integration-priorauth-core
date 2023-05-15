@@ -15,7 +15,7 @@ stages:
 - stage: Feature_Build
   displayName: 'Feature Build'
   variables:
-  - template: vars/vars-dev.yaml
+  - template: vars/vars-sandbox.yaml
   jobs:
     - deployment: "Feature_Build"
       displayName: "Feature Build"

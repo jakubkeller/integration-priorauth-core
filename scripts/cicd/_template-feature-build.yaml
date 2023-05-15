@@ -17,8 +17,8 @@ stages:
   variables:
   - template: vars/vars-dev.yaml
   jobs:
-    - deployment: "Deploy_${{ parameters.tpl_displayName }}"
-      displayName: "${{ parameters.tpl_displayName }}"
+    - deployment: "Build_Feature"
+      displayName: "Build Feature"
       workspace:
         clean: all
       environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource

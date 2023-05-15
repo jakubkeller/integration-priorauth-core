@@ -16,7 +16,7 @@ stages:
   displayName: 'Feature Build'
   jobs:
   - deployment: "Feature_${{ variables['Build.SourceBranch'] }}"
-    displayName: "Feature CICD for ${{ variables['Build.SourceBranch'] }}"
+    displayName: "Feature CICD for ${{ parameters.tpl_displayName }}"
     workspace:
       clean: all
     environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource

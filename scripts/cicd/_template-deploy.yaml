@@ -47,34 +47,6 @@ stages:
               env | sort
             displayName: 'Display Environment Variables'
 
-          # =========================================================================================
-          # Optional: Download only the DotnetApp artifiact from a related pipeline.
-          #
-          # By default, the deploy  task downloads all build artifacts, which includes
-          # cdk synth output and test results. These additional artifacts are, in some cases, much
-          # larger than the built application.
-          #
-          # To download only the build application(s), uncomment the following block and follow
-          # the instructions for how to find your specific project and pipeline GUIDs. For NUCLEUS,
-          # the project ID will always be the same.
-          # ==========================================================================================
-          # To get the project and pipeline IDs for the build pipeline triggering the deploy:
-          # 1. Use the ADO web interface to edit the deploy pipeline.
-          # 2. Add a Download Build Artifact task. Fill in the required fields for the ask and click add.
-          # 3. Cut the text just added to the pipeline and paste it into this file.
-          # 4. Cancel your edit in the ADO web interface
-          # - download: none
-          # - task: DownloadBuildArtifacts@0
-          #   inputs:
-          #     buildType: 'specific'
-          #     project: 'ed70c3c9-3261-4ec9-828b-5d7d675b5053' # NUCLEUS Project
-          #     pipeline: '572' #ID of csharp build pipeline
-          #     specificBuildWithTriggering: true
-          #     buildVersionToDownload: 'latest'
-          #     downloadType: 'single'
-          #     artifactName: '$(ARTIFACT_NAME)'
-          #     downloadPath: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)'
-
           - task: ExtractFiles@1
             inputs:
               archiveFilePatterns: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/**/*.zip'

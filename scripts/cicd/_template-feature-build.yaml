@@ -88,14 +88,6 @@ stages:
                 scriptPath: '$(DOTNET_SCRIPTS_PATH)/synth.sh'
                 disableAutoCwd: true
 
-            - task: ExtractFiles@1
-              inputs:
-                archiveFilePatterns: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/**/*.zip'
-                destinationFolder: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/$(ARTIFACT_NAME)'
-                cleanDestinationFolder: false
-                overwriteExistingFiles: true
-              displayName: 'Extract Zipped Artifact'
-
             - task: AWSShellScript@1
               displayName: 'CDK Deploy'
               inputs:

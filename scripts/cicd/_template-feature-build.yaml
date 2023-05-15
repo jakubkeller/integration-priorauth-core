@@ -15,8 +15,8 @@ stages:
 - stage: Feature Build
   displayName: 'Feature Build'
   jobs:
-    - deployment: "Deploy_${{ parameters.tpl_Environment }}"
-      displayName: "Deploy to ${{ parameters.tpl_Environment }}"
+    - deployment: "Deploy_${{ parameters.tpl_displayName }}"
+      displayName: "${{ parameters.tpl_displayName }}"
       workspace:
         clean: all
       environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource

@@ -15,95 +15,95 @@ stages:
 - stage: Feature Build
   displayName: 'Feature Build'
   jobs:
-  - deployment: "Feature_${{ variables['Build.SourceBranch'] }}"
-    displayName: "Feature CICD for ${{ parameters.tpl_displayName }}"
-    workspace:
-      clean: all
-    environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource
-    pool:
-      name: $(AGENT_POOL)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-                # Checkout code and clean agent working dir
-          - checkout: self
-            clean: ${{parameters.tpl_clean}}
+    - deployment: "Deploy_${{ parameters.tpl_Environment }}"
+      displayName: "Deploy to ${{ parameters.tpl_Environment }}"
+      workspace:
+        clean: all
+      environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource
+      pool:
+        name: $(AGENT_POOL)
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+                  # Checkout code and clean agent working dir
+            - checkout: self
+              clean: ${{parameters.tpl_clean}}
 
-          # Display environment variables
-          - script: |
-              echo "Environment variables"
-              echo "====================="
-              env | sort
-            displayName: 'Display Environment Variables'
+            # Display environment variables
+            - script: |
+                echo "Environment variables"
+                echo "====================="
+                env | sort
+              displayName: 'Display Environment Variables'
 
-          # Run build.sh
-          - task: ShellScript@2
-            displayName: 'Build Infra'
-            inputs:
-              args: ''
-              scriptPath: '$(DOTNET_SCRIPTS_PATH)/build.sh'        
-              disableAutoCwd: true
+            # Run build.sh
+            - task: ShellScript@2
+              displayName: 'Build Infra'
+              inputs:
+                args: ''
+                scriptPath: '$(DOTNET_SCRIPTS_PATH)/build.sh'        
+                disableAutoCwd: true
 
-          # Run test.sh
-          - task: ShellScript@2
-            displayName: 'Unit Tests'
-            inputs:
-              args: ''
-              scriptPath: '$(DOTNET_SCRIPTS_PATH)/tests.sh'
-              disableAutoCwd: true
+            # Run test.sh
+            - task: ShellScript@2
+              displayName: 'Unit Tests'
+              inputs:
+                args: ''
+                scriptPath: '$(DOTNET_SCRIPTS_PATH)/tests.sh'
+                disableAutoCwd: true
 
-        # Publish Test Results
-          - task: PublishTestResults@2
-            displayName: Publish Test Results
-            inputs:
-              testResultsFormat: VSTest
-              testResultsFiles: '*.trx'
-              searchFolder: '$(TESTRESULT_PATH)'
-              testRunTitle: '$(Build.BuildId) Test'
-              workingDirectory: ''
+          # Publish Test Results
+            - task: PublishTestResults@2
+              displayName: Publish Test Results
+              inputs:
+                testResultsFormat: VSTest
+                testResultsFiles: '*.trx'
+                searchFolder: '$(TESTRESULT_PATH)'
+                testRunTitle: '$(Build.BuildId) Test'
+                workingDirectory: ''
 
-        # Publish Code Coverage Report
-          - task: PublishCodeCoverageResults@1
-            displayName: 'Publish code coverage from $(TESTRESULT_PATH)/coverage.cobertura.xml'
-            inputs:
-              codeCoverageTool: Cobertura
-              summaryFileLocation: '$(TESTRESULT_PATH)/coverage.cobertura.xml'
+          # Publish Code Coverage Report
+            - task: PublishCodeCoverageResults@1
+              displayName: 'Publish code coverage from $(TESTRESULT_PATH)/coverage.cobertura.xml'
+              inputs:
+                codeCoverageTool: Cobertura
+                summaryFileLocation: '$(TESTRESULT_PATH)/coverage.cobertura.xml'
 
-          # Run publish_app.sh
-          - task: ShellScript@2
-            displayName: 'Publish App'
-            inputs:
-              args: ''
-              scriptPath: '$(DOTNET_SCRIPTS_PATH)/publish_app.sh'
-              disableAutoCwd: true
+            # Run publish_app.sh
+            - task: ShellScript@2
+              displayName: 'Publish App'
+              inputs:
+                args: ''
+                scriptPath: '$(DOTNET_SCRIPTS_PATH)/publish_app.sh'
+                disableAutoCwd: true
 
-        # Run synth.sh
-          - task: ShellScript@2
-            displayName: 'CDK Synth'
-            inputs:
-              arguments: ''
-              scriptPath: '$(DOTNET_SCRIPTS_PATH)/synth.sh'
-              disableAutoCwd: true
+          # Run synth.sh
+            - task: ShellScript@2
+              displayName: 'CDK Synth'
+              inputs:
+                arguments: ''
+                scriptPath: '$(DOTNET_SCRIPTS_PATH)/synth.sh'
+                disableAutoCwd: true
 
-          - task: ExtractFiles@1
-            inputs:
-              archiveFilePatterns: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/**/*.zip'
-              destinationFolder: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/$(ARTIFACT_NAME)'
-              cleanDestinationFolder: false
-              overwriteExistingFiles: true
-            displayName: 'Extract Zipped Artifact'
+            - task: ExtractFiles@1
+              inputs:
+                archiveFilePatterns: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/**/*.zip'
+                destinationFolder: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/$(ARTIFACT_NAME)'
+                cleanDestinationFolder: false
+                overwriteExistingFiles: true
+              displayName: 'Extract Zipped Artifact'
 
-          - task: AWSShellScript@1
-            displayName: 'CDK Deploy'
-            inputs:
-              awsCredentials: ${{ variables.SERVICE_CONNECTION }}
-              regionName: $(REGION_NAME)
-              scriptType: filePath
-              filePath: '$(INFRA_SCRIPTS_PATH)/deploy.sh'
-              disableAutoCwd: true
+            - task: AWSShellScript@1
+              displayName: 'CDK Deploy'
+              inputs:
+                awsCredentials: ${{ variables.SERVICE_CONNECTION }}
+                regionName: $(REGION_NAME)
+                scriptType: filePath
+                filePath: '$(INFRA_SCRIPTS_PATH)/deploy.sh'
+                disableAutoCwd: true
 
-          # Post Build Clean-up
-          - task: mspremier.PostBuildCleanup.PostBuildCleanup-task.PostBuildCleanup@3
-            condition: ${{ parameters.tpl_Postclean }}
-            displayName: 'Clean Agent Directories'
+            # Post Build Clean-up
+            - task: mspremier.PostBuildCleanup.PostBuildCleanup-task.PostBuildCleanup@3
+              condition: ${{ parameters.tpl_Postclean }}
+              displayName: 'Clean Agent Directories'

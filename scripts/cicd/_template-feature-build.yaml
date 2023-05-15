@@ -12,13 +12,13 @@ parameters:
   default: ''
 
 stages:
-- stage: Feature Build
+- stage: Feature_Build
   displayName: 'Feature Build'
   variables:
   - template: vars/vars-dev.yaml
   jobs:
-    - deployment: "Build_Feature"
-      displayName: "Build_Feature"
+    - deployment: "Feature_Build"
+      displayName: "Feature Build"
       workspace:
         clean: all
       environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource

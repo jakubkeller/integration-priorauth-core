@@ -18,7 +18,6 @@ resources:
       branches:
         include:
         - develop
-        - feature/*
         - release/*
 
 variables:

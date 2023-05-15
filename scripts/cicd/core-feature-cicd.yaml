@@ -7,15 +7,11 @@
 
 # NOTE: Main is built to retain artifacts and code coverage reports; however, this build occurs after the deploy of a release branch to production.
 
-trigger:
+pr:
   branches:
     include:
-    - main
-    - develop
-    - feature/*
-    - release/*
-    - bug/*
-    - hotfix/*
+      - feature/*
+      - bug/*
 
 variables:
 - template: vars/vars-global.yaml
@@ -40,8 +36,8 @@ parameters:
   - true
 
 stages:
-- template: _template-build.yaml
+- template: _template-feature-build.yaml
   parameters:
     tpl_clean: ${{parameters.clean}}
     tpl_Postclean: ${{parameters.Postclean}}
-    tpl_displayName: "Build ${{ variables['Build.SourceBranch'] }}"
+    tpl_displayName: "Feature Build ${{ variables['Build.SourceBranch'] }}"

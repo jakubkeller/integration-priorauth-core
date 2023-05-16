@@ -17,7 +17,6 @@ resources:
     trigger:
       branches:
         include:
-        - develop
         - release/*
 
 variables:
@@ -29,17 +28,6 @@ variables:
 # See README.md Environment approvals section
 # ============================================
 stages:
-# Sandbox environment / Feature branches
-- template: _template-deploy.yaml
-  parameters:
-      tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/') }}
-      tpl_Environment: "sandbox"
-
-# Development environment / develop branch
-- template: _template-deploy.yaml
-  parameters:
-      tpl_Enabled: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}
-      tpl_Environment: "dev"
 
 # Test environment / release branches
 - template: _template-deploy.yaml

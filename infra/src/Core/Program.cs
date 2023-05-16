@@ -11,6 +11,8 @@ sealed class Program
     public static void Main(string[] args)
     {
         var app = new App();
+        
+        // Test Feature Build
 
         var currentEnvironment = ConfigHelper.GetCurrentEnvironment(System.Environment.GetEnvironmentVariable("CDK_DEFAULT_ACCOUNT"));
 

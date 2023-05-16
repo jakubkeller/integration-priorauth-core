@@ -10,10 +10,8 @@
 trigger:
   branches:
     include:
-    - main
     - develop
     - release/*
-    - hotfix/*
 
 variables:
 - template: vars/vars-global.yaml

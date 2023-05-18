@@ -69,6 +69,8 @@ public enum EnviornmentType
 public static class ConfigHelper
 {
     private static Environment _currentEnvironment = null;
+    public static string AppRoot => System.Environment.GetEnvironmentVariable("LOCAL_APP_ROOT") ?? "banjo";
+      
     public static Environment GetCurrentEnvironment(string accountId = null)
     {
         if (_currentEnvironment != null)

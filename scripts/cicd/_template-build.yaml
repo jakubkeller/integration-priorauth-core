@@ -87,7 +87,7 @@ stages:
             displayName: 'CDK Synth'
             inputs:
               arguments: ''
-              scriptPath: '$(DOTNET_SCRIPTS_PATH)/synth.sh'
+              scriptPath: '$(INFRA_SCRIPTS_PATH)/synth.sh'
               disableAutoCwd: true
 
           # Run deploy.sh

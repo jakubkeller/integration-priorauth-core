@@ -12,11 +12,7 @@ sealed class Program
     {
         var app = new App();
         
-        // Test Feature Build
-
-        var currentEnvironment = ConfigHelper.GetCurrentEnvironment(System.Environment.GetEnvironmentVariable("CDK_DEFAULT_ACCOUNT"));
-
-        new CoreStack(app, $"{_localStackPrefix}-{currentEnvironment.Name}-CoreStack", new StackProps { Env = EnvironmentHelper.MakeEnvironment() });
+        new CoreStack(app, $"{ConfigHelper.AppRoot}-{ConfigHelper.GetCurrentEnvironment().Name}-CoreStack", new StackProps { Env = EnvironmentHelper.MakeEnvironment() });
 
         app.Synth();
     }

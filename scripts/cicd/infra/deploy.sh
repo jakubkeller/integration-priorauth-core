@@ -27,35 +27,31 @@ fi
 
 
 
-for file in $(find $LOCAL_PATH/infra/src/** -name *CoreStack.cs); do
-(
-    if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
-    stackName=$(basename $file .cs)
-        
-    echo ""
-    echo "Deploying Stack: $stackName"
-    echo ""
+if [[ -f DO_NOT_AUTOTEST ]]; then exit 0; fi
+stackName=CoreStack
+    
+echo ""
+echo "Deploying Stack: $stackName"
+echo ""
 
-    cd $LOCAL_PATH/infra
+cd $LOCAL_PATH/infra
 
-    if [ -z $profileName ]; then
-        cdkchk="npx cdk diff --fail $stackName"
-        cdkdeploy="npx cdk deploy --ci --require-approval never"
-    else
-        cdkchk="npx cdk diff --fail --profile $profileName"
-        cdkdeploy="npx cdk deploy --profile $profileName"
-    fi
+if [ -z $profileName ]; then
+    cdkchk="npx cdk diff --fail"
+    cdkdeploy="npx cdk deploy --ci --require-approval never"
+else
+    cdkchk="npx cdk diff --fail --profile $profileName"
+    cdkdeploy="npx cdk deploy --profile $profileName"
+fi
 
-    # detect changes to the stack
-    if $cdkchk; then
-        echo "No changes detected for $stackName"
-        echo "Deployment skipped for $stackName"
-    else
-        echo "Changes detected on $stackName"
-        $cdkdeploy
-        echo "CDK deploy executed for $stackName"
-    fi
-)
-done
+# detect changes to the stack
+if $cdkchk; then
+    echo "No changes detected for $stackName"
+    echo "Deployment skipped for $stackName"
+else
+    echo "Changes detected on $stackName"
+    $cdkdeploy
+    echo "CDK deploy executed for $stackName"
+fi
 
 echo "Deploy completed"

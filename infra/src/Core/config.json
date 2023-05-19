@@ -3,8 +3,8 @@
 		{
 			"Name": "sandbox",
 			"DisplayName": "Sandbox",
-			"AccountId": "822596811112",
-			"VpcId": "vpc-05c4d096272041b15"
+			"AccountId": "255169513165",
+			"VpcId": "vpc-06fffc9554d06dfef"
 		},
 		{
 			"Name": "dev",

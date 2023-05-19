@@ -1,3 +1,8 @@
+**/SpecFlow/userid
+**/**.feature.cs
+**/**.feature.xlsx.*
+cdksynth
+
 # CDK asset staging directory
 .cdk.staging
 cdk.out

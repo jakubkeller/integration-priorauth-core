@@ -11,13 +11,10 @@ public class CoreStack : BaseStack
     internal CoreStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
     {
 
-        const string EVENT_BUS_NAME = "Banjo";
         var stackName = Amazon.CDK.Stack.Of(this).StackName;
         var ssmPathRoot = $"/app/{stackName}/";
 
-        var banjoEventBus = new EventBus(this, "BanjoEventBus", new EventBusProps {
-            EventBusName = EVENT_BUS_NAME,
-        });
+        var banjoEventBus = new EventBus(this, "BanjoEventBus");
 
         new StringParameter(this, "BanjoEventbusArnSSMParameter", new StringParameterProps
         {

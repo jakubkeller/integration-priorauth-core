@@ -1,5 +1,5 @@
 variables:
-  SERVICE_CONNECTION: "pod12-sandbox"
+  SERVICE_CONNECTION: "pod16-sandbox"
   ENVIRONMENTTYPE: "sandbox"  # variable name must match name used in BaseTaggingOptions.cs, value must match AWS tagging policy
 
 # Notifications for Manual validation task

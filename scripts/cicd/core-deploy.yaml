@@ -11,8 +11,8 @@ trigger: none # Do not trigger on commits to a branch.
 
 resources:
   pipelines:
-  - pipeline: IntegrationBanjoCore # unique value that you can use to reference the pipeline resource later in this pipeline
-    source: integration-banjo-core-build # the source pipeline that produces an artifact
+  - pipeline: IntegrationPriorAuthCore # unique value that you can use to reference the pipeline resource later in this pipeline
+    source: integration-priorauth-core-build # the source pipeline that produces an artifact
     project: NUCLEUS
     trigger:
       branches:

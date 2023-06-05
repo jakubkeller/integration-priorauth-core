@@ -47,9 +47,9 @@ variables:
 # Update these to reflect the structure of your repository
 - ${{ if eq(parameters.tpl_type, 'Deploy') }}:
   - name: RESOURCE_PIPELINE_NAME
-    value: 'IntegrationBanjoCore'
+    value: 'IntegrationPriorAuthCore'
   - name: ARTIFACT_NAME
-    value: 'IntegrationBanjoCore' # artifact name from build pipeline
+    value: 'IntegrationPriorAuthCore' # artifact name from build pipeline
 
   - name: LOCAL_PATH
     value: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/$(ARTIFACT_NAME)/stage/'    

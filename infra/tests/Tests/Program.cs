@@ -1,6 +1,6 @@
 ﻿using Amazon.CDK;
-using Integration.Banjo.Core.Config;
-using Integration.Banjo.Base.Helpers;
+using Integration.PriorAuth.Core.Config;
+using Integration.PriorAuth.Infra.Base.Helpers;
 
 namespace Tests
 {

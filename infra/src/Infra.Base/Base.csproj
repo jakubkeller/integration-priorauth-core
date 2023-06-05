@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-		<PackageId>Integration.Banjo.Base</PackageId>
-		<Title>Integration.Banjo.Base</Title>
-		<Description>Base Nuget Deployable Integration Banjo components to reuse in all Integration Banjo repos.</Description>
+		<PackageId>Integration.PriorAuth.Infra.Base</PackageId>
+		<Title>Integration.PriorAuth.Infra.Base</Title>
+		<Description>Base Nuget Deployable Integration PriorAuth components to reuse in all Integration PriorAuth  repos.</Description>
 		<Version>1.0.0</Version>
     <Authors>POD16</Authors>
     <Company>Navitus</Company>
-    <Product>Integration Banjo</Product>
+    <Product>Integration PriorAuth</Product>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>

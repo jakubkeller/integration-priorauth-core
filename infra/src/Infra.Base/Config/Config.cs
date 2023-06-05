@@ -1,22 +1,18 @@
-
-
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text.Json;
 
-namespace Integration.Banjo.Core.Config;
+namespace Integration.PriorAuth.Infra.Base.Config;
 
 public class CommonConfig
 {
     public List<Environment> Environments { get; set; } = new List<Environment>();
+
     public Environment GetSandboxEnvironment()
     {
         return Environments.First(e => e.Enviornment == EnviornmentType.Sandbox);
     }
 }
+
 public class Environment
 {
     public string Name { get; set; } = default!;
@@ -69,29 +65,35 @@ public enum EnviornmentType
 
 public static class ConfigHelper
 {
-    private static Environment _currentEnvironment = null;
-    public static string AppRoot => System.Environment.GetEnvironmentVariable("LOCAL_APP_ROOT") ?? "banjo";
-      
-    public static Environment GetCurrentEnvironment(string accountId = null)
+    private static Environment? _currentEnvironment = null;
+    public static string AppRoot =>
+        System.Environment.GetEnvironmentVariable("LOCAL_APP_ROOT") ?? "integration-priorauth";
+
+    public static Environment GetCurrentEnvironment(string? accountId = null)
     {
         if (_currentEnvironment != null)
         {
             return _currentEnvironment;
         }
         // read config json file from assembly location where nuget package is installed
-        string assemblyDirectoryPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+        string assemblyDirectoryPath = Path.GetDirectoryName(
+            Assembly.GetExecutingAssembly().Location
+        )!;
         string configFilePath = Path.Combine(assemblyDirectoryPath, "config.json");
 
         var config = JsonSerializer.Deserialize<CommonConfig>(File.ReadAllText(configFilePath))!;
         if (string.IsNullOrEmpty(accountId))
         {
-            // if enviorment variable is not set, use Sandbox as default
+            // if environment variable is not set, use Sandbox as default
             accountId = config.GetSandboxEnvironment().AccountId;
         }
         Console.WriteLine($"AWS Account id: {accountId}");
 
         // read config json file into dictionary
-        _currentEnvironment = config.Environments.FirstOrDefault(e => e.AccountId == accountId, config.GetSandboxEnvironment());
+        _currentEnvironment = config.Environments.FirstOrDefault(
+            e => e.AccountId == accountId,
+            config.GetSandboxEnvironment()
+        );
 
         Console.WriteLine($"Current Environment: {_currentEnvironment.DisplayName}");
         return _currentEnvironment;

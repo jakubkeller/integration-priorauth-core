@@ -1,7 +1,7 @@
 using Amazon.CDK;
 using Constructs;
 
-namespace Integration.Banjo.Base.Helpers;
+namespace Integration.PriorAuth.Infra.Base.Helpers;
 
 public static class TaggingHelper
 {

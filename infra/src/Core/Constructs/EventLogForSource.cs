@@ -11,11 +11,8 @@ public class EventLogForSourceProps
 
 public class EventLogForSource : Construct
 {
-    public EventLogForSource(
-        Construct scope,
-        string id,
-        EventLogForSourceProps props
-    ): base(scope, id)
+    public EventLogForSource(Construct scope, string id, EventLogForSourceProps props)
+        : base(scope, id)
     {
         var logGroup = new LogGroup(
             this,

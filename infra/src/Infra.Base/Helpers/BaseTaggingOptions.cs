@@ -1,14 +1,13 @@
-using Integration.Banjo.Base.Helpers.Enums;
-using Environment = Integration.Banjo.Base.Helpers.Enums.Environment;
+using Integration.PriorAuth.Infra.Base.Helpers.Enums;
+using Environment = Integration.PriorAuth.Infra.Base.Helpers.Enums.Environment;
 
-namespace Integration.Banjo.Base.Helpers;
-
+namespace Integration.PriorAuth.Infra.Base.Helpers;
 
 public class BaseTaggingOptions
 {
     #region Properties
 
-    public string Name { get; set; } = "IntegrationBanjoCore";
+    public string Name { get; set; } = "IntegrationPriorAuthCore";
 
     public DataClassification DataClassification { get; set; } = DataClassification.Clear;
 
@@ -22,24 +21,24 @@ public class BaseTaggingOptions
         {
             if (!string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("USERNAME")))
             {
-                return System.Environment.GetEnvironmentVariable("USERNAME");
+                return System.Environment.GetEnvironmentVariable("USERNAME") ?? "vnp";
             }
             else
             {
-                return "Banjo-Integration-Team";
+                return "PriorAuth-Integration-Team";
             }
         }
     }
 
     public string Department { get; set; } = "vnp";
 
-    public string OwningTeam { get; set; } = "NUCLEUS-POD12";
+    public string OwningTeam { get; set; } = "NUCLEUS-POD16";
 
     public bool SafeShutdown { get; set; } = false;
 
     public string AwsBackup { get; set; } = "vnp";
 
-    public string BusinessOwner { get; set; } = "Banjo-Integration-Team@navitus.com";
+    public string BusinessOwner { get; set; } = "PriorAuth-Integration-Team@navitus.com";
 
     public string CostCenter { get; set; } = "vnp";
 
@@ -63,7 +62,7 @@ public class BaseTaggingOptions
 
     public string MaintainanceWindow { get; set; } = "vnp";
 
-    public string Notification { get; set; } = "Banjo-Integration-Team@navitus.com";
+    public string Notification { get; set; } = "PriorAuth-Integration-Team@navitus.com";
 
     public OS OS { get; set; } = OS.vnp;
 

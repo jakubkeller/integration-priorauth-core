@@ -1,6 +1,6 @@
-# Ensure that we are connected to banjo sandbox
+# Ensure that we are connected to priorauth sandbox
 sandbox:
-    ./scripts/cicd/infra/ensure_banjo_sandbox.sh
+    ./scripts/cicd/infra/ensure_priorauth_sandbox.sh
 
 # grant execute permission to all shell scripts in scripts folder
 chmod:

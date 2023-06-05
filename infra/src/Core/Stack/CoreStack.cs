@@ -2,60 +2,82 @@
 using Amazon.CDK.AWS.Events;
 using Constructs;
 using Amazon.CDK.AWS.SSM;
-using Integration.Banjo.Base;
-using Integration.Banjo.Core.Config;
+using Integration.PriorAuth.Infra.Base;
 
-namespace Integration.Banjo.Core.Stack;
+namespace Integration.PriorAuth.Core.Stack;
 
 public class CoreStack : BaseStack
 {
-    internal CoreStack(Construct scope, string id, IStackProps props = null) : base(scope, id, props)
+    internal CoreStack(Construct scope, string id, IStackProps props = null)
+        : base(scope, id, props)
     {
-        const string application = "banjo-integration";
-        const string banjoSource = $"com.navitus.{application}";
+        const string application = "integration.priorauth";
+        const string priorAuthSource = $"com.navitus.{application}";
         var stackName = Amazon.CDK.Stack.Of(this).StackName;
-        var environment = ConfigHelper.GetCurrentEnvironment();
         var ssmPathRoot = $"/app/{stackName}/";
-        var banjoEventBus = new EventBus(this, "BanjoEventBus", new EventBusProps() { EventBusName = $"banjo-{environment.Name}-event-bus" });
+        var integrationPriorAuthEventBus = new EventBus(
+            this,
+            "IntegrationPriorAuthEventBus",
+            new EventBusProps() { EventBusName = $"{stackName}-event-bus" }
+        );
 
-        new CfnEventBusPolicy(this, "BanjoEventBusPolicy", new CfnEventBusPolicyProps()
-        {
-            Action = "events:PutEvents",
-            EventBusName = banjoEventBus.EventBusName,
-            Principal = environment.MatchingUMAccount,
-            StatementId = $"EnableCrossAccountEventsFromUM{environment.MatchingUMAccount}"
-        });
+        new CfnEventBusPolicy(
+            this,
+            "IntegrationPriorAuthEventBusPolicy",
+            new CfnEventBusPolicyProps()
+            {
+                Action = "events:PutEvents",
+                EventBusName = integrationPriorAuthEventBus.EventBusName,
+                Principal = CurrentEnvironment.MatchingUMAccount,
+                StatementId =
+                    $"EnableCrossAccountEventsFromUMContext{CurrentEnvironment.MatchingUMAccount}"
+            }
+        );
 
         new CrossAccountEventBridgeSync(
             this,
             "CrossAccountEventBridgeSync",
             new CrossAccountEventBridgeSyncProps()
             {
-                ProducerEventBus = banjoEventBus,
-                Source = banjoSource,
+                ProducerEventBus = integrationPriorAuthEventBus,
+                Source = priorAuthSource,
                 ConsumerEventBusArns = new[]
                 {
-                    $"arn:{Aws.PARTITION}:events:{Aws.REGION}:{environment.MatchingUMAccount}:event-bus/umEventBus"
+                    $"arn:{Aws.PARTITION}:events:{Aws.REGION}:{CurrentEnvironment.MatchingUMAccount}:event-bus/umEventBus"
                 }
             }
         );
 
-        new EventLogForSource(this, "BanjoEventLog", new EventLogForSourceProps() {
-            EventBus = banjoEventBus,
-            Source = banjoSource
-        });
+        new EventLogForSource(
+            this,
+            "IntegrationPriorAuthEventLog",
+            new EventLogForSourceProps()
+            {
+                EventBus = integrationPriorAuthEventBus,
+                Source = priorAuthSource
+            }
+        );
 
-        new EventLogForSource(this, "UMEventLog", new EventLogForSourceProps() {
-            EventBus = banjoEventBus,
-            Source = "com.navitus.um"
-        });
+        new EventLogForSource(
+            this,
+            "UMEventLog",
+            new EventLogForSourceProps()
+            {
+                EventBus = integrationPriorAuthEventBus,
+                Source = "com.navitus.um"
+            }
+        );
 
-        new StringParameter(this, "BanjoEventbusArnSSMParameter", new StringParameterProps
-        {
-            Description = "The arn of the Banjo Event Bus",
-            ParameterName = $"{ssmPathRoot}BanjoEventBusArn",
-            StringValue = banjoEventBus.EventBusArn,
-            Tier = ParameterTier.STANDARD,
-        });
+        new StringParameter(
+            this,
+            "IntegrationPriorAuthEventbusArnSSMParameter",
+            new StringParameterProps
+            {
+                Description = "The arn of the Integration PriorAuth Event Bus",
+                ParameterName = $"{ssmPathRoot}IntegrationPriorAuthEventBusArn",
+                StringValue = integrationPriorAuthEventBus.EventBusArn,
+                Tier = ParameterTier.STANDARD,
+            }
+        );
     }
 }

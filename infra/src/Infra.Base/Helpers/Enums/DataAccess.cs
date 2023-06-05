@@ -1,8 +1,9 @@
-namespace Integration.Banjo.Base.Helpers.Enums
+namespace Integration.PriorAuth.Infra.Base.Helpers.Enums
 {
     public enum DataAccess
     {
         enterprise,
+
         // public = ""; <- keyword wont work as an enum
         org,
         admin,

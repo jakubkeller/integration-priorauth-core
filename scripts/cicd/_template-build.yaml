@@ -100,12 +100,6 @@ stages:
               filePath: '$(INFRA_SCRIPTS_PATH)/deploy.sh'
               disableAutoCwd: true
 
-          # TODO INTEGRATION TEST RUN HERE
-          - script: |
-              echo "TODO INTEGRATION TEST RUN HERE"
-              echo "====================="
-            displayName: 'Integration Tests'
-
           # Publish synth as artifact
           - task: PublishBuildArtifacts@1
             displayName: 'Publish Artifact - CDK Synth Output'
@@ -146,7 +140,7 @@ stages:
             displayName: 'Publish Build Artifact'
             inputs:
               PathtoPublish: '$(ARTIFACTSTAGING_PATH)/dotnetapp'
-              ArtifactName: IntegrationBanjoCore
+              ArtifactName: IntegrationPriorAuthCore
 
           # Post Build Clean-up
           - task: mspremier.PostBuildCleanup.PostBuildCleanup-task.PostBuildCleanup@3

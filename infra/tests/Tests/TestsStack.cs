@@ -4,7 +4,7 @@ using Amazon.CDK.AWS.SNS.Subscriptions;
 using Amazon.CDK.AWS.SQS;
 using Constructs;
 
-using Integration.Banjo.Base;
+using Integration.PriorAuth.Infra.Base;
 
 namespace Tests
 {

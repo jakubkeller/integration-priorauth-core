@@ -1,4 +1,4 @@
-namespace Integration.Banjo.Base.Helpers.Enums
+namespace Integration.PriorAuth.Infra.Base.Helpers.Enums
 {
     public enum CustomerType
     {

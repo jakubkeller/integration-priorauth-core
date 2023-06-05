@@ -1,4 +1,5 @@
 using Integration.Banjo.Base.Helpers.Enums;
+using Environment = Integration.Banjo.Base.Helpers.Enums.Environment;
 
 namespace Integration.Banjo.Base.Helpers;
 

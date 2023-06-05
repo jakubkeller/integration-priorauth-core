@@ -2,6 +2,7 @@
 **/**.feature.cs
 **/**.feature.xlsx.*
 cdksynth
+.config
 
 # CDK asset staging directory
 .cdk.staging

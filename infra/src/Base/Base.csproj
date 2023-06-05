@@ -1,6 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+		<PackageId>Integration.Banjo.Base</PackageId>
+		<Title>Integration.Banjo.Base</Title>
+		<Description>Base Nuget Deployable Integration Banjo components to reuse in all Integration Banjo repos.</Description>
+		<Version>1.0.0</Version>
+    <Authors>POD16</Authors>
+    <Company>Navitus</Company>
+    <Product>Integration Banjo</Product>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <!-- Roll forward to future major versions of the netcoreapp as needed -->
@@ -8,7 +18,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Config\config.json" />
+    <Content Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>

@@ -14,7 +14,7 @@ public class CoreStack : BaseStack
         const string application = "integration.priorauth";
         const string priorAuthSource = $"com.navitus.{application}";
         var stackName = Amazon.CDK.Stack.Of(this).StackName;
-        var ssmPathRoot = $"/app/{stackName}/";
+        var ssmPathRoot = $"/app/{base.AppRoot}/core/";
         var integrationPriorAuthEventBus = new EventBus(
             this,
             "IntegrationPriorAuthEventBus",

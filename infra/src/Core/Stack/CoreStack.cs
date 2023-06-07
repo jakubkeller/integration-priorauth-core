@@ -14,7 +14,8 @@ public class CoreStack : BaseStack
         const string application = "integration.priorauth";
         const string priorAuthSource = $"com.navitus.{application}";
         var stackName = Amazon.CDK.Stack.Of(this).StackName;
-        var ssmPathRoot = $"/app/{base.AppRoot}/core/";
+        var ssmPathRoot = $"/{base.AppRoot}/core";
+
         var integrationPriorAuthEventBus = new EventBus(
             this,
             "IntegrationPriorAuthEventBus",
@@ -74,7 +75,7 @@ public class CoreStack : BaseStack
             new StringParameterProps
             {
                 Description = "The arn of the Integration PriorAuth Event Bus",
-                ParameterName = $"{ssmPathRoot}IntegrationPriorAuthEventBusArn",
+                ParameterName = $"{ssmPathRoot}/IntegrationPriorAuthEventBusArn",
                 StringValue = integrationPriorAuthEventBus.EventBusArn,
                 Tier = ParameterTier.STANDARD,
             }

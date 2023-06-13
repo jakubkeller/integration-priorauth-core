@@ -119,7 +119,7 @@ stages:
                 **/infra/src/**/*.cs
                 **/infra/src/**/*.csproj
                 **/infra/cdk.json
-                **/infra/src/Core/config.json
+                **/infra/src/Infra.Base/config.json
               TargetFolder: '$(ARTIFACTSTAGING_PATH)/stage/'
               CleanTargetFolder: true
 
@@ -141,6 +141,12 @@ stages:
             inputs:
               PathtoPublish: '$(ARTIFACTSTAGING_PATH)/dotnetapp'
               ArtifactName: IntegrationPriorAuthCore
+
+          # Tag the pipeline
+          - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
+              - script: |
+                  echo "##vso[build.addbuildtag]release-candidate"
+                displayName: "Tag Release Candidate"
 
           # Post Build Clean-up
           - task: mspremier.PostBuildCleanup.PostBuildCleanup-task.PostBuildCleanup@3

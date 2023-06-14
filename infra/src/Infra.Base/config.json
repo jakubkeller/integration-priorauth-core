@@ -1,0 +1,25 @@
+{
+	"Environments": [
+		{
+			"Name": "sandbox",
+			"DisplayName": "Sandbox",
+			"AccountId": "255169513165",
+			"VpcId": "vpc-06fffc9554d06dfef",
+			"MatchingUMAccount": "822596811112"
+		},
+		{
+			"Name": "dev",
+			"DisplayName": "Development",
+			"AccountId": "593114250589",
+			"VpcId": "vpc-0a1521361f65270fb",
+			"MatchingUMAccount": "406651776354"
+		},
+        {
+			"Name": "test",
+			"DisplayName": "Test",
+			"AccountId": "463998292874",
+			"VpcId": "vpc-042ddb339b2448c63",
+			"MatchingUMAccount": "689489877515"
+		}
+	]
+}

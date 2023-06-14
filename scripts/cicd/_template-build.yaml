@@ -1,0 +1,154 @@
+parameters:
+- name: tpl_clean
+  type: boolean
+  default: true
+
+- name: tpl_Postclean
+  type: boolean
+  default: true
+
+- name: tpl_displayName
+  type: string
+  default: ''
+
+stages:
+- stage: Build
+  displayName: 'Build'
+  variables:
+  # TODO UPDATE WITH VARS-DEV.YAML ONCE SERVICE CONNECTION PERMISSION UPDATED
+  - template: vars/vars-sandbox.yaml
+  jobs:
+  - deployment: "Build"
+    displayName: "Build"
+    workspace:
+      clean: all
+    environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource
+    pool:
+      name: $(AGENT_POOL)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+
+          # Checkout code and clean agent working dir
+          - checkout: self
+            clean: ${{parameters.tpl_clean}}
+
+          # Display environment variables
+          - script: |
+              echo "Environment variables"
+              echo "====================="
+              env | sort
+            displayName: 'Display Environment Variables'
+
+          # Run build.sh
+          - task: ShellScript@2
+            displayName: 'Build Infra'
+            inputs:
+              args: ''
+              scriptPath: '$(DOTNET_SCRIPTS_PATH)/build.sh'        
+              disableAutoCwd: true
+
+          # Run test.sh
+          - task: ShellScript@2
+            displayName: 'Unit Tests'
+            inputs:
+              args: ''
+              scriptPath: '$(DOTNET_SCRIPTS_PATH)/tests.sh'
+              disableAutoCwd: true
+
+        # Publish Test Results
+          - task: PublishTestResults@2
+            displayName: Publish Test Results
+            inputs:
+              testResultsFormat: VSTest
+              testResultsFiles: '*.trx'
+              searchFolder: '$(TESTRESULT_PATH)'
+              testRunTitle: '$(Build.BuildId) Test'
+              workingDirectory: ''
+
+        # Publish Code Coverage Report
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish code coverage from $(TESTRESULT_PATH)/coverage.cobertura.xml'
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: '$(TESTRESULT_PATH)/coverage.cobertura.xml'
+
+          # Run publish_app.sh
+          - task: ShellScript@2
+            displayName: 'Publish App'
+            inputs:
+              args: ''
+              scriptPath: '$(DOTNET_SCRIPTS_PATH)/publish_app.sh'
+              disableAutoCwd: true
+
+          # Run synth.sh
+          - task: ShellScript@2
+            displayName: 'CDK Synth'
+            inputs:
+              arguments: ''
+              scriptPath: '$(INFRA_SCRIPTS_PATH)/synth.sh'
+              disableAutoCwd: true
+
+          # Run deploy.sh
+          - task: AWSShellScript@1
+            displayName: 'CDK Deploy'
+            inputs:
+              awsCredentials: ${{ variables.SERVICE_CONNECTION }}
+              regionName: $(REGION_NAME)
+              scriptType: filePath
+              filePath: '$(INFRA_SCRIPTS_PATH)/deploy.sh'
+              disableAutoCwd: true
+
+          # Publish synth as artifact
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish Artifact - CDK Synth Output'
+            inputs:
+              PathtoPublish: '$(ARTIFACTSTAGING_PATH)/cdksynth'
+              ArtifactName: cdksynth
+
+          # Copy application files to artifact staging location
+          - task: CopyFiles@2
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+            displayName: 'Stage Build Artifacts'
+            inputs:
+              SourceFolder: '$(LOCAL_PATH)'
+              Contents: |
+                **/dist/**
+                **/scripts/**
+                **/infra/src/**/*.cs
+                **/infra/src/**/*.csproj
+                **/infra/cdk.json
+                **/infra/src/Infra.Base/config.json
+              TargetFolder: '$(ARTIFACTSTAGING_PATH)/stage/'
+              CleanTargetFolder: true
+
+          # Run Zip Artifact
+          - task: ArchiveFiles@2
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+            displayName: Zip Artifact
+            inputs:
+              rootFolderOrFile: '$(ARTIFACTSTAGING_PATH)/stage/'
+              includeRootFolder: true
+              archiveType: 'zip'
+              archiveFile: '$(ARTIFACTSTAGING_PATH)/dotnetapp/$(Build.BuildId).zip'
+              replaceExistingArchive: true'
+
+          # Publish build artifact
+          - task: PublishBuildArtifacts@1
+            condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+            displayName: 'Publish Build Artifact'
+            inputs:
+              PathtoPublish: '$(ARTIFACTSTAGING_PATH)/dotnetapp'
+              ArtifactName: IntegrationPriorAuthCore
+
+          # Tag the pipeline
+          - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
+              - script: |
+                  echo "##vso[build.addbuildtag]release-candidate"
+                displayName: "Tag Release Candidate"
+
+          # Post Build Clean-up
+          - task: mspremier.PostBuildCleanup.PostBuildCleanup-task.PostBuildCleanup@3
+            condition: ${{ parameters.tpl_Postclean }}
+            displayName: 'Clean Agent Directories'

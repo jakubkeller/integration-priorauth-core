@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+		<PackageId>Integration.PriorAuth.Infra.Base</PackageId>
+		<Title>Integration.PriorAuth.Infra.Base</Title>
+		<Description>Base Nuget Deployable Integration PriorAuth components to reuse in all Integration PriorAuth  repos.</Description>
+		<Version>1.0.0</Version>
+    <Authors>POD16</Authors>
+    <Company>Navitus</Company>
+    <Product>Integration PriorAuth</Product>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <!-- Roll forward to future major versions of the netcoreapp as needed -->
+    <RollForward>Major</RollForward>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- CDK Construct Library dependencies -->
+    <PackageReference Include="Amazon.CDK.Lib" Version="2.78.0" />
+    <PackageReference Include="Constructs" Version="10.2.12" />
+    <PackageReference Include="Nucleus.Nagpack" Version="1.1.6" />
+
+    <!-- jsii Roslyn analyzers (un-comment to obtain compile-time checks for missing required props
+    <PackageReference Include="Amazon.Jsii.Analyzers" Version="*" PrivateAssets="all" />
+    -->
+  </ItemGroup>
+
+</Project>

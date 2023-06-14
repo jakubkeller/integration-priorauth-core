@@ -1,0 +1,65 @@
+# Parameters passed in from calling pipeline
+
+parameters:
+- name: tpl_Enabled
+  type: boolean
+  default: false
+- name: tpl_Environment
+  type: string
+  default: ''
+
+stages:
+- stage: "Deploy_${{ parameters.tpl_Environment }}"
+  displayName: "Deploy to ${{ parameters.tpl_Environment }}"
+  condition: and(not(failed()), eq('${{ parameters.tpl_Enabled }}', true))
+  variables:
+  - template: vars/vars-${{ parameters.tpl_Environment }}.yaml
+  jobs:
+  - ${{ if eq(parameters.tpl_environment, 'stage') }}:
+    - job: PausePipeline
+      pool: server
+      steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 1440 # task times out in 1 day
+        inputs:
+          notifyUsers: ${{ variables.pauseNotify }}
+          instructions: 'Please resume the release in order to proceed.'
+          onTimeout: 'timed out waiting for manual resume'
+
+  - deployment: "Deploy_${{ parameters.tpl_Environment }}"
+    ${{ if eq(parameters.tpl_environment, 'stage') }}:
+      dependsOn: PausePipeline
+    displayName: "Deploy to ${{ parameters.tpl_Environment }}"
+    workspace:
+      clean: all
+    environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource
+    pool:
+      name: $(AGENT_POOL)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          # Prevent the default download of all build artifacts, including cdk synth output and test results
+
+          - script: |
+              echo "Environment variables"
+              echo "====================="
+              env | sort
+            displayName: 'Display Environment Variables'
+
+          - task: ExtractFiles@1
+            inputs:
+              archiveFilePatterns: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/**/*.zip'
+              destinationFolder: '$(PIPELINE.WORKSPACE)/$(RESOURCE_PIPELINE_NAME)/$(ARTIFACT_NAME)'
+              cleanDestinationFolder: false
+              overwriteExistingFiles: true
+            displayName: 'Extract Zipped Artifact'
+
+          - task: AWSShellScript@1
+            displayName: 'CDK Deploy'
+            inputs:
+              awsCredentials: ${{ variables.SERVICE_CONNECTION }}
+              regionName: $(REGION_NAME)
+              scriptType: filePath
+              filePath: '$(INFRA_SCRIPTS_PATH)/deploy.sh'
+              disableAutoCwd: true

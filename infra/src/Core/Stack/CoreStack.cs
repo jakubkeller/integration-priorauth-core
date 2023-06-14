@@ -8,11 +8,12 @@ namespace Integration.PriorAuth.Core.Stack;
 
 public class CoreStack : BaseStack
 {
+    private const string Application = "integration.priorauth";
+
     internal CoreStack(Construct scope, string id, IStackProps props = null)
-        : base(scope, id, props)
+        : base(scope, id, props, Application)
     {
-        const string application = "integration.priorauth";
-        const string priorAuthSource = $"com.navitus.{application}";
+        const string priorAuthSource = $"com.navitus.{Application}";
         var stackName = Amazon.CDK.Stack.Of(this).StackName;
         var ssmPathRoot = $"/{base.AppRoot}/core";
 
@@ -80,5 +81,7 @@ public class CoreStack : BaseStack
                 Tier = ParameterTier.STANDARD,
             }
         );
+
+        Amazon.CDK.Tags.Of(this).Add("Name", "Integration-PriorAuth-Core", new TagProps { Priority = 20 });
     }
 }

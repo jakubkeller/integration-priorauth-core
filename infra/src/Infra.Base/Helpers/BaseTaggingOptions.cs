@@ -7,11 +7,11 @@ public class BaseTaggingOptions
 {
     #region Properties
 
-    public string Name { get; set; } = "IntegrationPriorAuthCore";
+    public string Name { get; set; } = "Integration-PriorAuth";
 
-    public DataClassification DataClassification { get; set; } = DataClassification.Clear;
+    public DataClassification DataClassification { get; set; } = DataClassification.PHI;
 
-    public string Context { get; set; } = "Core";
+    public string Context { get; set; } = "Integration-PriorAuth";
 
     public Environment Environment { get; set; } = Environment.sandbox;
 
@@ -30,37 +30,13 @@ public class BaseTaggingOptions
         }
     }
 
-    public string Department { get; set; } = "vnp";
-
     public string OwningTeam { get; set; } = "NUCLEUS-POD16";
 
     public bool SafeShutdown { get; set; } = false;
 
-    public string AwsBackup { get; set; } = "vnp";
-
     public string BusinessOwner { get; set; } = "PriorAuth-Integration-Team@navitus.com";
 
-    public string CostCenter { get; set; } = "vnp";
-
-    public string MapMigrated { get; set; } = "vnp";
-
-    public string MapDba { get; set; } = "vnp";
-
-    public string AwsMigrationProjectId { get; set; } = "vnp";
-
     public Compliance Compliance { get; set; } = Compliance.vnp;
-
-    public string DataAccess { get; set; } = "vnp";
-
-    public Customer Customer { get; set; } = Customer.vnp;
-
-    public CustomerType CustomerType { get; set; } = CustomerType.vnp;
-
-    public string Version { get; set; } = "vnp";
-
-    public string ServiceRequest { get; set; } = "vnp";
-
-    public string MaintainanceWindow { get; set; } = "vnp";
 
     public string Notification { get; set; } = "PriorAuth-Integration-Team@navitus.com";
 

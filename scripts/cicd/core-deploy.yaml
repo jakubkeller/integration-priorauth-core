@@ -14,14 +14,14 @@ resources:
   - pipeline: IntegrationPriorAuthCore # unique value that you can use to reference the pipeline resource later in this pipeline
     source: integration-priorauth-core-build # the source pipeline that produces an artifact
     project: NUCLEUS
-    # tags: 
-    # - release-candidate  
+    tags: 
+    - release-candidate  
     trigger:
       branches:
         include:
         - release/*
-      # tags: 
-      # - release-candidate
+      tags: 
+      - release-candidate
       
 variables:
 - template: vars/vars-global.yaml
@@ -36,7 +36,7 @@ stages:
 # Dev environment / release branches
 - template: _template-deploy.yaml
   parameters:
-      tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/gaurav/fix') }}
+      tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
       tpl_Environment: "dev"
 
 # # Test environment / release branches

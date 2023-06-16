@@ -22,7 +22,7 @@ variables:
 parameters:
 - name: serviceConnection # ADO Service Connection Name
   displayName: ADO Service Connection Name
-  default: "pod16-sandbox"
+  default: "integration-dev"
   values:
     - "pod16-sandbox"
     - "integration-dev"

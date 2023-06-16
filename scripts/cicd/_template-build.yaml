@@ -11,18 +11,24 @@ parameters:
   type: string
   default: ''
 
+- name: tpl_serviceConnection
+  type: string  
+
 stages:
 - stage: Build
   displayName: 'Build'
   variables:
-  # TODO UPDATE WITH VARS-DEV.YAML ONCE SERVICE CONNECTION PERMISSION UPDATED
-  - template: vars/vars-sandbox.yaml
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      SERVICE_CONNECTION: "pod16-sandbox"
+    ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+      SERVICE_CONNECTION: ${{ parameters.tpl_serviceConnection }}
+
   jobs:
   - deployment: "Build"
-    displayName: "Build"
+    displayName: "Build and Deploy to ${{ variables.SERVICE_CONNECTION }}"
     workspace:
       clean: all
-    environment: ${{ variables.SERVICE_CONNECTION }} # ADO Environment Resource
+    environment: ${{ variables.SERVICE_CONNECTION }}
     pool:
       name: $(AGENT_POOL)
     strategy:

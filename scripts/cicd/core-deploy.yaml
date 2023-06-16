@@ -33,17 +33,11 @@ variables:
 # ============================================
 stages:
 
-# Dev environment / release branches
+# Test environment / release branches
 - template: _template-deploy.yaml
   parameters:
       tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
-      tpl_Environment: "dev"
-
-# # Test environment / release branches
-# - template: _template-deploy.yaml
-#   parameters:
-#       tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
-#       tpl_Environment: "test"
+      tpl_Environment: "test"
 
 # # Stage environment / release branches
 # - template: _template-deploy.yaml
@@ -56,3 +50,5 @@ stages:
 #   parameters:
 #       tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
 #       tpl_Environment: "production"
+
+- template: _template_release_finish.yaml

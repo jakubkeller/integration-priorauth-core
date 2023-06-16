@@ -32,7 +32,7 @@ public class CoreStack : BaseStack
                 EventBusName = integrationPriorAuthEventBus.EventBusName,
                 Principal = CurrentEnvironment.MatchingUMAccount,
                 StatementId =
-                    $"EnableCrossAccountEventsFromUMContext{CurrentEnvironment.MatchingUMAccount}"
+                     $"{base.AppRoot}-EnableEventsFromUMContext{CurrentEnvironment.MatchingUMAccount}"
             }
         );
 

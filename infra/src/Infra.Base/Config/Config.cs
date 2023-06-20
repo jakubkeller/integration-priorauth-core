@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text.Json;
 
 namespace Integration.PriorAuth.Infra.Base.Config;
@@ -18,7 +18,9 @@ public class Environment
     public string Name { get; set; } = default!;
     public string DisplayName { get; set; } = default!;
     public string AccountId { get; set; } = default!;
+    [Obsolete("Use VPC Name instead of VPC Id")]
     public string VpcId { get; set; } = default!;
+    public string VpcName { get; set; } = default!;
     public string MatchingUMAccount { get; set; } = default!;
     public EnviornmentType Enviornment
     {

@@ -14,15 +14,16 @@ resources:
   - pipeline: IntegrationPriorAuthCore # unique value that you can use to reference the pipeline resource later in this pipeline
     source: integration-priorauth-core-build # the source pipeline that produces an artifact
     project: NUCLEUS
-    tags: 
-    - release-candidate  
+    #tags:
+    #- release-candidate
     trigger:
       branches:
         include:
         - release/*
-      tags: 
-      - release-candidate
-      
+        - feature/nick/*
+      #tags:
+      #- release-candidate
+
 variables:
 - template: vars/vars-global.yaml
   parameters:
@@ -36,19 +37,19 @@ stages:
 # Test environment / release branches
 - template: _template-deploy.yaml
   parameters:
-      tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
+      tpl_Enabled: ${{ or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/nick/')) }}
       tpl_Environment: "test"
 
-# # Stage environment / release branches
-# - template: _template-deploy.yaml
-#   parameters:
-#       tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
-#       tpl_Environment: "stage"
+# Stage environment / release branches
+- template: _template-deploy.yaml
+  parameters:
+      tpl_Enabled: ${{ or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/nick/')) }}
+      tpl_Environment: "stage"
 
-# # Production environment / release branches
-# - template: _template-deploy.yaml
-#   parameters:
-#       tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
-#       tpl_Environment: "production"
+# Production environment / release branches
+- template: _template-deploy.yaml
+  parameters:
+      tpl_Enabled: ${{ or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/nick/')) }}
+      tpl_Environment: "prod"
 
 - template: _template_release_finish.yaml

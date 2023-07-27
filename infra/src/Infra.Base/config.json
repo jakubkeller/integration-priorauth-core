@@ -23,6 +23,22 @@
       "VpcId": "vpc-042ddb339b2448c63",
       "VpcName": "Integration-Test VPC",
       "MatchingUMAccount": "689489877515"
+    },
+    {
+      "Name": "stage",
+      "DisplayName": "Stage",
+      "AccountId": "208832203821",
+      "VpcId": "vpc-09d5cfa7f823585c2",
+      "VpcName": "Integration-Stage VPC",
+      "MatchingUMAccount": "708388369307"
+    },
+    {
+      "Name": "prod",
+      "DisplayName": "Prod",
+      "AccountId": "447778220405",
+      "VpcId": "vpc-0e45d6f43f4a22816",
+      "VpcName": "Integration-Prod VPC",
+      "MatchingUMAccount": "407736563583"
     }
 	]
 }

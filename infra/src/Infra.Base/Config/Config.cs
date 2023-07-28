@@ -22,6 +22,8 @@ public class Environment
     public string VpcId { get; set; } = default!;
     public string VpcName { get; set; } = default!;
     public string MatchingUMAccount { get; set; } = default!;
+    public string[] NotificationEmailAddresses { get; set; } = Array.Empty<string>();
+
     public EnviornmentType Enviornment
     {
         get

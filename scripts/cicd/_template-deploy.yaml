@@ -15,7 +15,7 @@ stages:
   variables:
   - template: vars/vars-${{ parameters.tpl_Environment }}.yaml
   jobs:
-  - ${{ if eq(parameters.tpl_environment, 'stage') }}:
+  - ${{ if or(eq(variables['parameters.tpl_environment'], 'stage'), eq(variables['parameters.tpl_enironment'], 'prod')) }}:
     - job: PausePipeline
       pool: server
       steps:
@@ -27,7 +27,7 @@ stages:
           onTimeout: 'timed out waiting for manual resume'
 
   - deployment: "Deploy_${{ parameters.tpl_Environment }}"
-    ${{ if eq(parameters.tpl_environment, 'stage') }}:
+    ${{ if or(eq(variables['parameters.tpl_environment'], 'stage'), eq(variables['parameters.tpl_enironment'], 'prod')) }}:
       dependsOn: PausePipeline
     displayName: "Deploy to ${{ parameters.tpl_Environment }}"
     workspace:

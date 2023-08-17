@@ -14,15 +14,16 @@ resources:
   - pipeline: IntegrationPriorAuthCore # unique value that you can use to reference the pipeline resource later in this pipeline
     source: integration-priorauth-core-build # the source pipeline that produces an artifact
     project: NUCLEUS
-    tags: 
-    - release-candidate  
+    #tags:
+    #- release-candidate
     trigger:
       branches:
         include:
         - release/*
-      tags: 
-      - release-candidate
-      
+        - feature/nick/*
+      #tags:
+      #- release-candidate
+
 variables:
 - template: vars/vars-global.yaml
   parameters:

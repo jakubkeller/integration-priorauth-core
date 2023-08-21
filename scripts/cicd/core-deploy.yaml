@@ -20,7 +20,7 @@ resources:
       branches:
         include:
         - release/*
-        - feature/nick/*
+        - hotfix/*
       #tags:
       #- release-candidate
 
@@ -33,23 +33,22 @@ variables:
 # See README.md Environment approvals section
 # ============================================
 stages:
-
-# Test environment / release branches
+# # Test environment / release branches
 - template: _template-deploy.yaml
   parameters:
-      tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
-      tpl_Environment: "test"
+    tpl_Enabled: ${{ or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}
+    tpl_Environment: "test"
 
 # # Stage environment / release branches
-# - template: _template-deploy.yaml
-#   parameters:
-#       tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
-#       tpl_Environment: "stage"
+- template: _template-deploy.yaml
+  parameters:
+    tpl_Enabled: ${{ or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}
+    tpl_Environment: "stage"
 
 # # Production environment / release branches
-# - template: _template-deploy.yaml
-#   parameters:
-#       tpl_Enabled: ${{ startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}
-#       tpl_Environment: "production"
+- template: _template-deploy.yaml
+  parameters:
+    tpl_Enabled: ${{ or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}
+    tpl_Environment: "prod"
 
 - template: _template_release_finish.yaml

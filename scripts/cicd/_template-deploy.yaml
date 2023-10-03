@@ -7,11 +7,16 @@ parameters:
 - name: tpl_Environment
   type: string
   default: ''
+- name: tpl_DependsOn
+  type: string
+  default: ''
 
 stages:
 - stage: "Deploy_${{ parameters.tpl_Environment }}"
   displayName: "Deploy to ${{ parameters.tpl_Environment }}"
-  condition: and(not(failed()), eq('${{ parameters.tpl_Enabled }}', true))
+  condition: and(succeeded(), eq('${{ parameters.tpl_Enabled }}', true))
+  ${{ if parameters.tpl_DependsOn }}:
+    dependsOn: "Deploy_${{ parameters.tpl_DependsOn }}"
   variables:
   - template: vars/vars-${{ parameters.tpl_Environment }}.yaml
   jobs:

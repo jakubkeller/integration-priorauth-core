@@ -89,13 +89,16 @@ stages:
               disableAutoCwd: true
 
           # Run synth.sh
-          - task: ShellScript@2
-            displayName: 'CDK Synth'
+          - task: AWSShellScript@1
+            displayName: "CDK Synth"
             inputs:
-              arguments: ''
-              scriptPath: '$(INFRA_SCRIPTS_PATH)/synth.sh'
-              disableAutoCwd: true
-
+              awsCredentials: ${{ variables.SERVICE_CONNECTION }}
+              regionName: $(REGION_NAME)
+              scriptType: filePath
+              filePath: '$(INFRA_SCRIPTS_PATH)/synth.sh'
+              workingDirectory: "$(Build.Repository.LocalPath)"
+              disableAutoCwd: true 
+          
           # Run deploy.sh
           - task: AWSShellScript@1
             displayName: 'CDK Deploy'
@@ -104,6 +107,7 @@ stages:
               regionName: $(REGION_NAME)
               scriptType: filePath
               filePath: '$(INFRA_SCRIPTS_PATH)/deploy.sh'
+              workingDirectory: "$(Build.Repository.LocalPath)"
               disableAutoCwd: true
 
           # Publish synth as artifact

@@ -1,5 +1,5 @@
 {
-	"Environments": [
+  "Environments": [
     {
       "Name": "sandbox",
       "DisplayName": "Sandbox",
@@ -7,8 +7,8 @@
       "VpcId": "vpc-06fffc9554d06dfef",
       "VpcName": "POD16 VPC",
       "MatchingUMAccount": "822596811112",
-      "NotificationEmailAddresses": [ 
-        "aws.utilizationmanagement+sandbox-integ@navitus.com" 
+      "NotificationEmailAddresses": [
+        "aws.utilizationmanagement+sandbox-integ@navitus.com"
       ]
     },
     {
@@ -18,8 +18,8 @@
       "VpcId": "vpc-0a1521361f65270fb",
       "VpcName": "Integration-Dev VPC",
       "MatchingUMAccount": "406651776354",
-      "NotificationEmailAddresses": [ 
-        "aws.utilizationmanagement+dev-integ@navitus.com" 
+      "NotificationEmailAddresses": [
+        "aws.utilizationmanagement+dev-integ@navitus.com"
       ]
     },
     {
@@ -29,8 +29,8 @@
       "VpcId": "vpc-042ddb339b2448c63",
       "VpcName": "Integration-Test VPC",
       "MatchingUMAccount": "689489877515",
-      "NotificationEmailAddresses": [ 
-        "aws.utilizationmanagement+test-integ@navitus.com" 
+      "NotificationEmailAddresses": [
+        "aws.utilizationmanagement+test-integ@navitus.com"
       ]
     },
     {
@@ -40,8 +40,8 @@
       "VpcId": "vpc-09d5cfa7f823585c2",
       "VpcName": "Integration-Stage VPC",
       "MatchingUMAccount": "708388369307",
-      "NotificationEmailAddresses": [ 
-        "aws.utilizationmanagement+stage-integ@navitus.com" 
+      "NotificationEmailAddresses": [
+        "aws.utilizationmanagement+stage@navitus.com"
       ]
     },
     {
@@ -51,9 +51,9 @@
       "VpcId": "vpc-0e45d6f43f4a22816",
       "VpcName": "Integration-Prod VPC",
       "MatchingUMAccount": "407736563583",
-      "NotificationEmailAddresses": [ 
-        "aws.utilizationmanagement+prod-integ@navitus.com" 
+      "NotificationEmailAddresses": [
+        "aws.utilizationmanagement+prod-integ@navitus.com"
       ]
     }
-	]
+  ]
 }

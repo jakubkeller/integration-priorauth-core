@@ -3,6 +3,7 @@ using Amazon.CDK.AWS.Events;
 using Constructs;
 using Amazon.CDK.AWS.SSM;
 using Integration.PriorAuth.Infra.Base;
+using Integration.PriorAuth.Infra.Base.Config;
 
 namespace Integration.PriorAuth.Core.Stack;
 
@@ -14,8 +15,20 @@ public class CoreStack : BaseStack
         : base(scope, id, props, Application)
     {
         const string priorAuthSource = $"com.navitus.{Application}";
-        var stackName = Amazon.CDK.Stack.Of(this).StackName;
-        var ssmPathRoot = $"/{base.AppRoot}/core";
+        var stackName = Of(this).StackName;
+        var ssmPathRoot = $"/{AppRoot}/core";
+        var isSandbox = EnviornmentType.Sandbox.Equals(CurrentEnvironment.Enviornment);
+
+        var alarmTopic = new AlarmTopic(
+            this,
+            "IntegrationPriorAuthAlarmTopic",
+            new AlarmTopicProps()
+            {
+                IsSandbox = isSandbox,
+                BaseEnvironmentVariables = CurrentEnvironment,
+                DisplayName = $"int-priorauth-core-{CurrentEnvironment.Name}-alarm-topic",
+            }
+        );
 
         var integrationPriorAuthEventBus = new EventBus(
             this,
@@ -32,7 +45,7 @@ public class CoreStack : BaseStack
                 EventBusName = integrationPriorAuthEventBus.EventBusName,
                 Principal = CurrentEnvironment.MatchingUMAccount,
                 StatementId =
-                     $"{base.AppRoot}-EnableEventsFromUMContext{CurrentEnvironment.MatchingUMAccount}"
+                    $"{base.AppRoot}-EnableEventsFromUMContext{CurrentEnvironment.MatchingUMAccount}"
             }
         );
 
@@ -82,6 +95,21 @@ public class CoreStack : BaseStack
             }
         );
 
-        Amazon.CDK.Tags.Of(this).Add("Name", "Integration-PriorAuth-Core", new TagProps { Priority = 20 });
+        new StringParameter(
+            this,
+            "IntegrationPriorAuthAlarmTopicArnSSMParameter",
+            new StringParameterProps
+            {
+                Description =
+                    "The arn of the Integration PriorAuth Core Alarm Topic which generates alerts for the Utilization Management team to respond to.",
+                ParameterName = $"{ssmPathRoot}/IntegrationPriorAuthAlarmTopicArn",
+                StringValue = alarmTopic.Topic.TopicArn,
+                Tier = ParameterTier.STANDARD,
+            }
+        );
+
+        Amazon.CDK.Tags
+            .Of(this)
+            .Add("Name", "Integration-PriorAuth-Core", new TagProps { Priority = 20 });
     }
 }

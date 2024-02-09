@@ -19,9 +19,9 @@ variables:
 # See README.md in cicd folder for version specification details of each tool.
 # None of these values are required
 - name: NODE_VERSION
-  value: '16.20.0'
+  value: '20.11.0'
 - name: CDK_VERSION
-  value: '2.78'  
+  value: '2.126.0'  
 - name: PYTHON_VERSION
   value: ''
 

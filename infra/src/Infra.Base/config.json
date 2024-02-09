@@ -4,7 +4,6 @@
       "Name": "sandbox",
       "DisplayName": "Sandbox",
       "AccountId": "255169513165",
-      "VpcId": "vpc-06fffc9554d06dfef",
       "VpcName": "POD16 VPC",
       "MatchingUMAccount": "822596811112",
       "NotificationEmailAddresses": [
@@ -15,7 +14,6 @@
       "Name": "dev",
       "DisplayName": "Development",
       "AccountId": "593114250589",
-      "VpcId": "vpc-0a1521361f65270fb",
       "VpcName": "Integration-Dev VPC",
       "MatchingUMAccount": "406651776354",
       "NotificationEmailAddresses": [
@@ -26,7 +24,6 @@
       "Name": "test",
       "DisplayName": "Test",
       "AccountId": "463998292874",
-      "VpcId": "vpc-042ddb339b2448c63",
       "VpcName": "Integration-Test VPC",
       "MatchingUMAccount": "689489877515",
       "NotificationEmailAddresses": [
@@ -37,7 +34,6 @@
       "Name": "stage",
       "DisplayName": "Stage",
       "AccountId": "208832203821",
-      "VpcId": "vpc-09d5cfa7f823585c2",
       "VpcName": "Integration-Stage VPC",
       "MatchingUMAccount": "708388369307",
       "NotificationEmailAddresses": [
@@ -48,7 +44,6 @@
       "Name": "prod",
       "DisplayName": "Prod",
       "AccountId": "447778220405",
-      "VpcId": "vpc-0e45d6f43f4a22816",
       "VpcName": "Integration-Prod VPC",
       "MatchingUMAccount": "407736563583",
       "NotificationEmailAddresses": [

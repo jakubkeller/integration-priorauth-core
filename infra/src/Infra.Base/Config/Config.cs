@@ -9,7 +9,7 @@ public class CommonConfig
 
     public Environment GetSandboxEnvironment()
     {
-        return Environments.First(e => e.Enviornment == EnviornmentType.Sandbox);
+        return Environments.First(e => e.Type == EnvironmentType.Sandbox);
     }
 }
 
@@ -18,36 +18,34 @@ public class Environment
     public string Name { get; set; } = default!;
     public string DisplayName { get; set; } = default!;
     public string AccountId { get; set; } = default!;
-    [Obsolete("Use VPC Name instead of VPC Id")]
-    public string VpcId { get; set; } = default!;
     public string VpcName { get; set; } = default!;
     public string MatchingUMAccount { get; set; } = default!;
     public string[] NotificationEmailAddresses { get; set; } = Array.Empty<string>();
 
-    public EnviornmentType Enviornment
+    public EnvironmentType Type
     {
         get
         {
             // map string to enum
             if (Name == "sandbox")
             {
-                return EnviornmentType.Sandbox;
+                return EnvironmentType.Sandbox;
             }
             else if (Name == "dev")
             {
-                return EnviornmentType.Dev;
+                return EnvironmentType.Dev;
             }
             else if (Name == "test")
             {
-                return EnviornmentType.Test;
+                return EnvironmentType.Test;
             }
             else if (Name == "stage")
             {
-                return EnviornmentType.Stage;
+                return EnvironmentType.Stage;
             }
             else if (Name == "prod")
             {
-                return EnviornmentType.Prod;
+                return EnvironmentType.Prod;
             }
             else
             {
@@ -58,7 +56,7 @@ public class Environment
     }
 }
 
-public enum EnviornmentType
+public enum EnvironmentType
 {
     Sandbox = 0,
     Dev = 1,

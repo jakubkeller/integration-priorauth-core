@@ -17,7 +17,7 @@ public class CoreStack : BaseStack
         const string priorAuthSource = $"com.navitus.{Application}";
         var stackName = Of(this).StackName;
         var ssmPathRoot = $"/{AppRoot}/core";
-        var isSandbox = EnviornmentType.Sandbox.Equals(CurrentEnvironment.Enviornment);
+        var isSandbox = EnvironmentType.Sandbox.Equals(CurrentEnvironment.Type);
 
         var alarmTopic = new AlarmTopic(
             this,

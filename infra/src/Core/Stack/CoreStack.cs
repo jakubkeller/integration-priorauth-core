@@ -4,6 +4,8 @@ using Constructs;
 using Amazon.CDK.AWS.SSM;
 using Integration.PriorAuth.Infra.Base;
 using Integration.PriorAuth.Infra.Base.Config;
+using Amazon.CDK.AWS.SecretsManager;
+using System.Collections.Generic;
 
 namespace Integration.PriorAuth.Core.Stack;
 
@@ -36,7 +38,7 @@ public class CoreStack : BaseStack
             new EventBusProps() { EventBusName = $"{stackName}-event-bus" }
         );
 
-        new CfnEventBusPolicy(
+        _ = new CfnEventBusPolicy(
             this,
             "IntegrationPriorAuthEventBusPolicy",
             new CfnEventBusPolicyProps()
@@ -49,7 +51,7 @@ public class CoreStack : BaseStack
             }
         );
 
-        new CrossAccountEventBridgeSync(
+        _ = new CrossAccountEventBridgeSync(
             this,
             "CrossAccountEventBridgeSync",
             new CrossAccountEventBridgeSyncProps()
@@ -63,7 +65,7 @@ public class CoreStack : BaseStack
             }
         );
 
-        new EventLogForSource(
+        _ = new EventLogForSource(
             this,
             "IntegrationPriorAuthEventLog",
             new EventLogForSourceProps()
@@ -73,7 +75,7 @@ public class CoreStack : BaseStack
             }
         );
 
-        new EventLogForSource(
+        _ = new EventLogForSource(
             this,
             "UMEventLog",
             new EventLogForSourceProps()
@@ -83,7 +85,7 @@ public class CoreStack : BaseStack
             }
         );
 
-        new StringParameter(
+        _ = new StringParameter(
             this,
             "IntegrationPriorAuthEventbusArnSSMParameter",
             new StringParameterProps
@@ -95,7 +97,7 @@ public class CoreStack : BaseStack
             }
         );
 
-        new StringParameter(
+        _ = new StringParameter(
             this,
             "IntegrationPriorAuthAlarmTopicArnSSMParameter",
             new StringParameterProps
@@ -105,6 +107,27 @@ public class CoreStack : BaseStack
                 ParameterName = $"{ssmPathRoot}/IntegrationPriorAuthAlarmTopicArn",
                 StringValue = alarmTopic.Topic.TopicArn,
                 Tier = ParameterTier.STANDARD,
+            }
+        );
+
+        // this is a secret used to store creds for Banjo AppClient
+        // you will deploy this placeholder and manually update the secret in lower envs for testing
+        // in higher env we will need someone else to provision this for us based on what banjo gives us
+        _ = new Secret(
+            this,
+            "BanjoAppClientSecret",
+            new SecretProps
+            {
+                SecretName = "AppClient/Banjo",
+                Description = "Integration AppClient to Interact with Banjo APIs",
+                SecretObjectValue = new Dictionary<string, SecretValue>
+                {
+                    { "clientId", SecretValue.UnsafePlainText("<< NOT A REAL CLIENT ID >>") },
+                    { "clientSecret", SecretValue.UnsafePlainText("<< NOT A REAL SECRET >>") },
+                    { "authUrl", SecretValue.UnsafePlainText("<< NOT A REAL AUTH URL >>") },
+                    { "authScope", SecretValue.UnsafePlainText("<< NOT THE REAL AUTH SCOPE >>") },
+                    { "code", SecretValue.UnsafePlainText("<< NOT THE REAL CODE >>") }
+                }
             }
         );
 

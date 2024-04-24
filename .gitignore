@@ -3,6 +3,7 @@
 **/**.feature.xlsx.*
 cdksynth
 .config
+.mono
 
 # CDK asset staging directory
 .cdk.staging

@@ -130,6 +130,7 @@ stages:
                 **/infra/src/**/*.csproj
                 **/infra/cdk.json
                 **/infra/src/Infra.Base/config.json
+                global.json
               TargetFolder: '$(ARTIFACTSTAGING_PATH)/stage/'
               CleanTargetFolder: true
 

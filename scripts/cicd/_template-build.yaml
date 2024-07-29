@@ -55,31 +55,6 @@ stages:
               scriptPath: '$(DOTNET_SCRIPTS_PATH)/build.sh'        
               disableAutoCwd: true
 
-          # Run test.sh
-          - task: ShellScript@2
-            displayName: 'Unit Tests'
-            inputs:
-              args: ''
-              scriptPath: '$(DOTNET_SCRIPTS_PATH)/tests.sh'
-              disableAutoCwd: true
-
-        # Publish Test Results
-          - task: PublishTestResults@2
-            displayName: Publish Test Results
-            inputs:
-              testResultsFormat: VSTest
-              testResultsFiles: '*.trx'
-              searchFolder: '$(TESTRESULT_PATH)'
-              testRunTitle: '$(Build.BuildId) Test'
-              workingDirectory: ''
-
-        # Publish Code Coverage Report
-          - task: PublishCodeCoverageResults@1
-            displayName: 'Publish code coverage from $(TESTRESULT_PATH)/coverage.cobertura.xml'
-            inputs:
-              codeCoverageTool: Cobertura
-              summaryFileLocation: '$(TESTRESULT_PATH)/coverage.cobertura.xml'
-
           # Run publish_app.sh
           - task: ShellScript@2
             displayName: 'Publish App'

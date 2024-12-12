@@ -31,7 +31,7 @@
     <PackageReference Include="Nucleus.Nagpack" Version="1.4.0" />
 
     <!-- Pinning For Snyk Vulnerability Remediation -->
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
 
     <!-- jsii Roslyn analyzers (un-comment to obtain compile-time checks for missing required props
     <PackageReference Include="Amazon.Jsii.Analyzers" Version="*" PrivateAssets="all" />

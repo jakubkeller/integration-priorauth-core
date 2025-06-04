@@ -56,8 +56,9 @@ stages:
     tpl_Enabled: ${{ or(startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'), startsWith(variables['Build.SourceBranch'], 'refs/heads/hotfix/')) }}
     tpl_Environment: "prod"
     tpl_DependsOn: "stage"
-- template: finish-branch-template.yml@templates
+
+- template: gitflow/finish-branch-template.yml@templates
   parameters:
     srcBranch: ${{ variables['Build.SourceBranch'] }}
     srcVersion: ${{ variables['Build.SourceBranchName'] }}
-    tpl_DependsOn: "Deploy_prod"
+    prodStageName: "Deploy_prod"

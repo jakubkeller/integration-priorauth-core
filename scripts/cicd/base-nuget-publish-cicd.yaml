@@ -3,8 +3,8 @@ trigger:
 - develop
 
 variables:
-  NODE_VERSION: "20.11.0"
-  CDK_VERSION: "2.126.0"
+  NODE_VERSION: "22.11.0"
+  CDK_VERSION: "2.1033.0"
 
 # Queue Time Configuration Parameters
 parameters:

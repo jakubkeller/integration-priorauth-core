@@ -47,6 +47,13 @@ stages:
               env | sort
             displayName: 'Display Environment Variables'
 
+          # Ensure .NET SDK version required by global.json is installed on the agent
+          - task: UseDotNet@2
+            displayName: 'Use .NET 10 SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '10.0.x'
+
           # Run build.sh
           - task: ShellScript@2
             displayName: 'Build Infra'

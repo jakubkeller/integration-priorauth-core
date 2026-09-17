@@ -26,7 +26,6 @@
   <ItemGroup>
     <!-- CDK Construct Library dependencies -->
     <PackageReference Include="Amazon.CDK.Lib" Version="2.269.0" />
-    <PackageReference Include="Constructs" Version="[10.3.0,11.0.0)" />
     <PackageReference Include="Nucleus.Nagpack" Version="1.4.0" />
 
     <!-- Pinning For Snyk Vulnerability Remediation -->

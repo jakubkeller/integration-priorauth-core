@@ -49,6 +49,12 @@ stages:
         env | sort
       displayName: 'Display Environment Variables'
 
+    - task: UseDotNet@2
+      displayName: 'Use .NET 10 SDK'
+      inputs:
+        packageType: 'sdk'
+        version: '10.0.x'
+
     - script: |
         chmod u+x ./scripts/cicd/dotnet/pack.sh
         ./scripts/cicd/dotnet/pack.sh

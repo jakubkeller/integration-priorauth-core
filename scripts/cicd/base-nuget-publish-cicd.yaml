@@ -68,10 +68,10 @@ stages:
       inputs:
         forceReinstallCredentialProvider: true
 
-    - script: cp global.json $(Build.StagingDirectory)/global.json
+    - script: cp global.json $(Agent.BuildDirectory)/global.json
       condition: succeeded()
       workingDirectory: "$(Build.Repository.LocalPath)"
-      displayName: 'Ensure SDK resolution for NuGet push'
+      displayName: 'Place global.json for NuGet push SDK resolution'
 
     - task: DotNetCoreCLI@2
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))

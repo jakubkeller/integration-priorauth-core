@@ -74,6 +74,7 @@ stages:
       continueOnError: true
       inputs:
         command: 'push'
+        workingDirectory: "$(Build.Repository.LocalPath)"
         packagesToPush: '$(Build.StagingDirectory)/**/Integration.PriorAuth.*.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: 'Test_Feed'
@@ -85,6 +86,7 @@ stages:
       continueOnError: true
       inputs:
         command: 'push'
+        workingDirectory: "$(Build.Repository.LocalPath)"
         packagesToPush: '$(Build.StagingDirectory)/**/Integration.PriorAuth.*.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: 'Enterprise_Feed'

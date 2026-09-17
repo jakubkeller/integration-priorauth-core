@@ -68,13 +68,17 @@ stages:
       inputs:
         forceReinstallCredentialProvider: true
 
+    - script: cp global.json $(Build.StagingDirectory)/global.json
+      condition: succeeded()
+      workingDirectory: "$(Build.Repository.LocalPath)"
+      displayName: 'Ensure SDK resolution for NuGet push'
+
     - task: DotNetCoreCLI@2
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
       displayName: 'Publish Integration PriorAuth Base Package to Test_Feed'
       continueOnError: true
       inputs:
         command: 'push'
-        workingDirectory: "$(Build.Repository.LocalPath)"
         packagesToPush: '$(Build.StagingDirectory)/**/Integration.PriorAuth.*.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: 'Test_Feed'
@@ -86,7 +90,6 @@ stages:
       continueOnError: true
       inputs:
         command: 'push'
-        workingDirectory: "$(Build.Repository.LocalPath)"
         packagesToPush: '$(Build.StagingDirectory)/**/Integration.PriorAuth.*.nupkg'
         nuGetFeedType: 'internal'
         publishVstsFeed: 'Enterprise_Feed'

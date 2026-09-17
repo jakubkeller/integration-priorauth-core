@@ -68,10 +68,14 @@ stages:
       inputs:
         forceReinstallCredentialProvider: true
 
-    - script: cp global.json $(Build.StagingDirectory)/global.json
+    - script: |
+        if [ -f "$HOME/global.json" ]; then
+          cp "$HOME/global.json" "$HOME/global.json.bak"
+        fi
+        cp global.json "$HOME/global.json"
       condition: succeeded()
       workingDirectory: "$(Build.Repository.LocalPath)"
-      displayName: 'Ensure SDK resolution for NuGet push'
+      displayName: 'Override agent global.json for NuGet push'
 
     - task: DotNetCoreCLI@2
       condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
@@ -94,3 +98,12 @@ stages:
         nuGetFeedType: 'internal'
         publishVstsFeed: 'Enterprise_Feed'
         allowPackageConflicts: true
+
+    - script: |
+        if [ -f "$HOME/global.json.bak" ]; then
+          mv "$HOME/global.json.bak" "$HOME/global.json"
+        else
+          rm -f "$HOME/global.json"
+        fi
+      condition: always()
+      displayName: 'Restore agent global.json'

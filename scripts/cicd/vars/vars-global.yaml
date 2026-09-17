@@ -21,7 +21,7 @@ variables:
 - name: NODE_VERSION
   value: '22.11.0'
 - name: CDK_VERSION
-  value: '2.1033.0'  
+  value: '2.1142.0'
 - name: PYTHON_VERSION
   value: ''
 
